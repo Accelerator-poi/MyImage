@@ -1,8 +1,6 @@
-#include "basic.h"
+#include "basic.hpp"
+#include "filter.hpp"
 #include <ctime>
-
-clock_t start, end;
-clock_t start_2, end_2;
 
 
 int main()
@@ -11,11 +9,13 @@ int main()
 	image = cv::imread("./lena.jpg");
 	if (image.data == NULL)
 		std::cout << "image data is NULL";
-	std::cout << image.channels();
-	namedWindow("beautiful",WINDOW_NORMAL);
-	cv::Mat image_2;
-	image_2 = RGB2Gray(image);
-	imshow("beautiful", image_2);
+	std::cout << image.type() << std::endl;
+	std::vector<cv::Mat>channels;
+	split(image, channels);
+	std::cout << channels.at(0).type() << std::endl;
+	cv::Mat image_3 = MeanFilt(image);
+	imshow("img", image);
+	imshow("Mean", image_3);
 	waitKey(60000);
 	return 0;
 	    
