@@ -48,7 +48,7 @@ cv::Mat MeanFilt(cv::Mat img)
 		Mysplit(img, chann);
 		for (int i = 0; i < img.channels(); i++)
 			chann_2.push_back(MeanFilt(chann.at(i)));
-		merge(chann_2, image);
+		image = Mymerge(chann_2);
 	}
 	return image;
 }

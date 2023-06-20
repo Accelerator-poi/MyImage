@@ -18,6 +18,10 @@ cv::Mat RGB2Gray(const cv::Mat img);
 //输入图片和vector，图片通道会依次存放在vector中
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels);
 
+//通道融合
+//vector中存放各个通道图像，返回一张融合后的图像
+cv::Mat Mymerge(const std::vector<Mat> channels);
+
 
 cv::Mat RGB2Gray(const cv::Mat img)
 {
@@ -80,3 +84,55 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 		break;
 	}
 };
+
+cv::Mat Mymerge(const std::vector<Mat> channels)
+{
+	assert(channels.size() != 0);
+	int h = channels.at(0).rows;
+	int w = channels.at(0).cols;
+	switch (channels.size())
+	{
+	case 1:
+	{
+		cv::Mat image = channels.at(0);
+		return image;
+		break;
+	}
+	case 2:
+	{
+		cv::Mat image(h, w, CV_8UC2);
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < h; j++)
+			{
+				Vec2b* row = image.ptr<Vec2b>(j);
+				const uchar* row_2 = channels.at(i).ptr<uchar>(j);
+				for (int k = 0; k < w; k++)
+				{
+					row[k][i] = row_2[k];
+				}
+			}
+		}
+		return image;
+		break;
+	}
+	case 3:
+	{
+		cv::Mat image(h, w, CV_8UC3);
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < h; j++)
+			{
+				Vec3b* row = image.ptr<Vec3b>(j);
+				const uchar* row_2 = channels.at(i).ptr<uchar>(j);
+				for (int k = 0; k < w; k++)
+				{
+					row[k][i] = row_2[k];
+				}
+			}
+		}
+		return image;
+		break;
+	}
+	}
+}
