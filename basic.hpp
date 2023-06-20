@@ -44,17 +44,18 @@ cv::Mat RGB2Gray(const cv::Mat img)
 
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 {
-	cv::Mat image(img.rows,img.cols,0);
 	switch (img.channels())
 	{
 	case 1:
 		channels.push_back(img);
 		break;
 	case 2:
+	{
 		for (int i = 0; i < 2; i++)
 		{
+			cv::Mat image(img.rows, img.cols, CV_8UC1);
 			for (int j = 0; j < img.rows; j++)
-			{
+			{	
 				const Vec2b* row = img.ptr<Vec2b>(j);
 				uchar* row_2 = image.ptr<uchar>(j);
 				for (int k = 0; k < img.cols; k++)
@@ -64,11 +65,13 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 			}
 			channels.push_back(image);
 		}
-	
-		break;
+
+		break; 
+	}
 	case 3:
 		for (int i = 0; i < 3; i++)
 		{
+			cv::Mat image(img.rows, img.cols, CV_8UC1);
 			for (int j = 0; j < img.rows; j++)
 			{
 				const Vec3b* row = img.ptr<Vec3b>(j);
