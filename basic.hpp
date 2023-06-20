@@ -9,20 +9,14 @@ using namespace cv;
 //这个hpp用来存放一些基础操作
 //如图像缩放、图像翻转等
 
-//rows:行数 cols:列数
-//RGB图像转灰度图
-//输入RGB图像，输出灰度图
 cv::Mat RGB2Gray(const cv::Mat img);
-
-//通道分离
-//输入图片和vector，图片通道会依次存放在vector中
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels);
-
-//通道融合
-//vector中存放各个通道图像，返回一张融合后的图像
 cv::Mat Mymerge(const std::vector<Mat> channels);
 
 
+//rows:行数 cols:列数
+//RGB图像转灰度图
+//输入RGB图像，输出灰度图
 cv::Mat RGB2Gray(const cv::Mat img)
 {
 	assert(img.data != NULL && img.channels() == 3);
@@ -42,6 +36,8 @@ cv::Mat RGB2Gray(const cv::Mat img)
 	return image;
 }
 
+//通道分离
+//输入图片和vector，图片通道会依次存放在vector中
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 {
 	switch (img.channels())
@@ -88,6 +84,8 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 	}
 };
 
+//通道融合
+//vector中存放各个通道图像，返回一张融合后的图像
 cv::Mat Mymerge(const std::vector<Mat> channels)
 {
 	assert(channels.size() != 0);

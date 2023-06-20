@@ -2,6 +2,11 @@
 #include "filter.hpp"
 #include <ctime>
 
+clock_t start_1, end_1;
+clock_t start_2, end_2;
+clock_t start_3, end_3;
+clock_t start_4, end_4;
+
 
 int main()
 {
@@ -11,11 +16,11 @@ int main()
 		std::cout << "image data is NULL";
 	std::cout << image.type() << std::endl;
 	std::vector<cv::Mat>channels;
-	Mysplit(image, channels);
-	std::cout << channels.at(0).type() << std::endl;
-	cv::Mat image_3 = MeanFilt(image);
+	std::vector<cv::Mat>channels_2;
+	cv::Mat image_2 = MidFilt(image);
+	//cv::Mat image_3 = MeanFilt(image);
 	imshow("img", image);
-	imshow("Mean", image_3);
+	imshow("Middle", image_2);
 //	imshow("0", channels.at(0));
 //	imshow("1", channels.at(1));
 //	imshow("2", channels.at(2));
