@@ -1,5 +1,6 @@
 #include "basic.hpp"
 #include "filter.hpp"
+#include "noise.hpp"
 #include <ctime>
 
 clock_t start_1, end_1;
@@ -17,10 +18,11 @@ int main()
 	std::cout << image.type() << std::endl;
 	std::vector<cv::Mat>channels;
 	std::vector<cv::Mat>channels_2;
-	cv::Mat image_2 = MidFilt(image);
-	//cv::Mat image_3 = MeanFilt(image);
+	cv::Mat image_2 = SaltNoise(image,0.1);
+	cv::Mat image_3 = MidFilt(image_2);
 	imshow("img", image);
-	imshow("Middle", image_2);
+	imshow("Salt", image_2);
+	imshow("Mean", image_3);
 //	imshow("0", channels.at(0));
 //	imshow("1", channels.at(1));
 //	imshow("2", channels.at(2));
