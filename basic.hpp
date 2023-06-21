@@ -1,7 +1,7 @@
 #pragma once
-#include <opencv2/highgui/highgui.hpp>  
-#include <opencv2/imgproc/imgproc.hpp>  
-#include <opencv2/core/core.hpp>  
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
@@ -12,7 +12,6 @@ using namespace cv;
 cv::Mat RGB2Gray(const cv::Mat img);
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels);
 cv::Mat Mymerge(const std::vector<Mat> channels);
-
 
 //rows:行数 cols:列数
 //RGB图像转灰度图
@@ -51,7 +50,7 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 		{
 			cv::Mat image(img.rows, img.cols, CV_8UC1);
 			for (int j = 0; j < img.rows; j++)
-			{	
+			{
 				const Vec2b* row = img.ptr<Vec2b>(j);
 				uchar* row_2 = image.ptr<uchar>(j);
 				for (int k = 0; k < img.cols; k++)
@@ -62,7 +61,7 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 			channels.push_back(image);
 		}
 
-		break; 
+		break;
 	}
 	case 3:
 		for (int i = 0; i < 3; i++)
@@ -79,7 +78,7 @@ void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels)
 			}
 			channels.push_back(image);
 		}
-	
+
 		break;
 	}
 };
