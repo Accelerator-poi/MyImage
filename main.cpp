@@ -17,11 +17,14 @@ int main()
 	std::cout << image.type() << std::endl;
 	std::vector<cv::Mat>channels;
 	std::vector<cv::Mat>channels_2;
-	cv::Mat image_2 = GaussNoise(image, 0, 30);
-	cv::Mat image_3 = MeanFilt(image_2);
+	cv::Mat image_(cv::Mat::zeros(image.size(), image.type()));
+	cv::Mat image_2 = GaussNoise(image_, 20, 30);
+	cv::Mat image_3 = Myadd(image, image_2);
+	cv::Mat image_4 = GaussNoise(image, 20, 30);
 	imshow("img", image);
 	imshow("Salt", image_2);
-	imshow("Mean", image_3);
+	imshow("Add", image_3);
+	imshow("Gauss", image_4);
 	//	imshow("0", channels.at(0));
 	//	imshow("1", channels.at(1));
 	//	imshow("2", channels.at(2));

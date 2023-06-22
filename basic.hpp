@@ -12,6 +12,7 @@ using namespace cv;
 cv::Mat RGB2Gray(const cv::Mat img);
 void Mysplit(const cv::Mat img, std::vector<cv::Mat>& channels);
 cv::Mat Mymerge(const std::vector<Mat> channels);
+cv::Mat Myadd(cv::Mat img_1, cv::Mat img_2);
 
 //rows:行数 cols:列数
 //RGB图像转灰度图
@@ -135,4 +136,34 @@ cv::Mat Mymerge(const std::vector<Mat> channels)
 		break;
 	}
 	}
+}
+
+//矩阵叠加函数
+//输入两个矩阵，返回矩阵相加结果
+cv::Mat Myadd(cv::Mat img_1, cv::Mat img_2)
+{
+	assert(img_1.channels() == img_2.channels());
+	assert(img_1.size() == img_2.size());
+
+	std::vector<cv::Mat> chan_1;
+	std::vector<cv::Mat> chan_2;
+
+	Mysplit(img_1, chan_1);
+	Mysplit(img_2, chan_2);
+
+	for (int i = 0; i < chan_1.size(); i++)
+	{
+		for (int j = 0; j < img_1.rows; j++)
+		{
+			for (int k = 0; k < img_1.cols; k++)
+			{
+				int result = chan_1.at(i).ptr<uchar>(j)[k] + chan_2.at(i).ptr<uchar>(j)[k];
+				result = (result > 255) ? 255 : result;
+				chan_1.at(i).ptr<uchar>(j)[k] = result;
+			}
+		}
+	}
+
+	cv::Mat image = Mymerge(chan_1);
+	return image;
 }
