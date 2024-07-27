@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QImage>
 #include <opencv2/opencv.hpp>
+#include <vector>
 
 class ImageProcess : public QObject
 {    
@@ -31,6 +32,12 @@ public slots:
     void LoG();
     void Scharr();
     void Canny();
+    void Back();
+    void Next();
+    void GaussianNoise();
+    void SaltAndPepperNoise();
+    void PoissonNoise();
+    void UniformNoise();
 
 signals:
     void imageReady(const QImage &image);
@@ -38,8 +45,9 @@ signals:
 private:
     cv::Mat currentImage;
     QImage mat2QImage(const cv::Mat &mat);
-    // cv::Mat QImage2mat(const QImage &image);
-
+    std::vector<cv::Mat> PicVec;
+    cv::Mat* PicPoint;
+    void UpdatePicVec();
 };
 
 #endif

@@ -29,6 +29,12 @@ MyImage::MyImage(QWidget *parent)
     connect(ui->LoGBtn, &QPushButton::clicked, this, &MyImage::onLoGBtnClicked);
     connect(ui->ScharrBtn, &QPushButton::clicked, this, &MyImage::onScharrBtnClicked);
     connect(ui->CannyBtn, &QPushButton::clicked, this, &MyImage::onCannyBtnClicked);
+    connect(ui->BackBtn, &QPushButton::clicked, this, &MyImage::onBackBtnClicked);
+    connect(ui->NextBtn, &QPushButton::clicked, this, &MyImage::onNextBtnClicked);
+    connect(ui->GaussianNoiseBtn, &QPushButton::clicked, this, &MyImage::onGaussianNoiseBtnClicked);
+    connect(ui->SaltNoiseBtn, &QPushButton::clicked, this, &MyImage::onSaltAndPepperNoiseBtnClicked);
+    connect(ui->PoissonNoiseBtn, &QPushButton::clicked, this, &MyImage::onPoissonNoiseBtnClicked);
+    connect(ui->UniformNoiseBtn, &QPushButton::clicked, this, &MyImage::onUniformNoiseBtnClicked);
 }
 
 void MyImage::UpdateImage(QImage image)
@@ -300,4 +306,54 @@ void MyImage::onCannyBtnClicked()
         IsTransformed = false;
     }
     emit CannyBtnClicked();
+}
+
+void MyImage::onBackBtnClicked()
+{
+    emit BackBtnClicked();
+}
+
+void MyImage::onNextBtnClicked()
+{
+    emit NextBtnClicked();
+}
+
+void MyImage::onGaussianNoiseBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit GaussianNoiseBtnClicked();
+}
+
+void MyImage::onSaltAndPepperNoiseBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit SaltAndPepperNoiseBtnClicked();
+}
+
+void MyImage::onPoissonNoiseBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit PoissonNoiseBtnClicked();
+}
+
+void MyImage::onUniformNoiseBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit UniformNoiseBtnClicked();
 }

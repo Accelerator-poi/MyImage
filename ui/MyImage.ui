@@ -6,22 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>566</height>
+    <width>751</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MyImage</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout" columnstretch="1,6">
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout"/>
-        </item>
+     <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="1,6">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -131,6 +128,19 @@
          </layout>
         </item>
         <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -212,6 +222,71 @@
              <string>高通滤波</string>
             </property>
            </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_20">
+            <item>
+             <widget class="Line" name="line_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>噪声添加</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line_12">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="GaussianNoiseBtn">
+              <property name="text">
+               <string>高斯噪声</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="SaltNoiseBtn">
+              <property name="text">
+               <string>椒盐噪声</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_21">
+            <item>
+             <widget class="QPushButton" name="PoissonNoiseBtn">
+              <property name="text">
+               <string>泊松噪声</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="UniformNoiseBtn">
+              <property name="text">
+               <string>均匀噪声</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -451,12 +526,60 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="PicLabelBefore">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_7" stretch="6,1">
+        <item>
+         <widget class="QLabel" name="PicLabelBefore">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_19">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="BackBtn">
+            <property name="text">
+             <string>&lt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="NextBtn">
+            <property name="text">
+             <string>&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -467,7 +590,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>737</width>
+     <width>751</width>
      <height>19</height>
     </rect>
    </property>

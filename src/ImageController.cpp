@@ -26,5 +26,11 @@ ImageController::ImageController(MyImage *view, ImageProcess *model)
     connect(view, &MyImage::LoGBtnClicked, model, &ImageProcess::LoG);
     connect(view, &MyImage::ScharrBtnClicked, model, &ImageProcess::Scharr);
     connect(view, &MyImage::CannyBtnClicked, model, &ImageProcess::Canny);
+    connect(view, &MyImage::BackBtnClicked, model, &ImageProcess::Back);
+    connect(view, &MyImage::NextBtnClicked, model, &ImageProcess::Next);
+    connect(view, &MyImage::GaussianNoiseBtnClicked, model, &ImageProcess::GaussianNoise);
+    connect(view, &MyImage::SaltAndPepperNoiseBtnClicked, model, &ImageProcess::SaltAndPepperNoise);
+    connect(view, &MyImage::PoissonNoiseBtnClicked, model, &ImageProcess::PoissonNoise);
+    connect(view, &MyImage::UniformNoiseBtnClicked, model, &ImageProcess::UniformNoise);
 }
 

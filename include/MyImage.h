@@ -25,6 +25,12 @@ signals:
     void LoGBtnClicked();
     void ScharrBtnClicked();
     void CannyBtnClicked();
+    void BackBtnClicked();
+    void NextBtnClicked();
+    void GaussianNoiseBtnClicked();
+    void SaltAndPepperNoiseBtnClicked();
+    void PoissonNoiseBtnClicked();
+    void UniformNoiseBtnClicked();
     
 public:
     MyImage(QWidget* parent = nullptr);
@@ -61,4 +67,10 @@ private slots:
     void onLoGBtnClicked();
     void onScharrBtnClicked();
     void onCannyBtnClicked();
+    void onBackBtnClicked();
+    void onNextBtnClicked();
+    void onGaussianNoiseBtnClicked();
+    void onSaltAndPepperNoiseBtnClicked();
+    void onPoissonNoiseBtnClicked();
+    void onUniformNoiseBtnClicked();
 };
