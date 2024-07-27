@@ -16,9 +16,6 @@ private:
     MyImage *view;
     ImageProcess *model;
 
-private slots:
-    void onImportBtnClicked(QString filename);
-
 };
 
 
