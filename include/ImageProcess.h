@@ -12,6 +12,7 @@ class ImageProcess : public QObject
 
 public slots:
     void setImg(QString filename);
+    // void UpdateImage(QImage image);
     void Gray();
     void Binary(int threshold);
     void Transform(int size, int angle);
@@ -20,6 +21,16 @@ public slots:
     void Gaussian();
     void LowPass();
     void HighPass();
+    void Corrosion();
+    void Expansion();
+    void Opening();
+    void Closing();
+    void Roberts();
+    void Prewitt();
+    void Sobel();
+    void LoG();
+    void Scharr();
+    void Canny();
 
 signals:
     void imageReady(const QImage &image);
@@ -27,6 +38,7 @@ signals:
 private:
     cv::Mat currentImage;
     QImage mat2QImage(const cv::Mat &mat);
+    // cv::Mat QImage2mat(const QImage &image);
 
 };
 

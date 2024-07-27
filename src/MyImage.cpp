@@ -19,6 +19,16 @@ MyImage::MyImage(QWidget *parent)
     connect(ui->GaussBtn, &QPushButton::clicked, this, &MyImage::onGaussianBtnClicked);
     connect(ui->LowPassBtn, &QPushButton::clicked, this, &MyImage::onLowPassBtnClicked);
     connect(ui->HighPassBtn, &QPushButton::clicked, this, &MyImage::onHighPassBtnClicked);
+    connect(ui->CorrosionBtn, &QPushButton::clicked, this, &MyImage::onCorrosionBtnClicked);
+    connect(ui->ExpansionBtn, &QPushButton::clicked, this, &MyImage::onExpansionBtnClicked);
+    connect(ui->OpenBtn, &QPushButton::clicked, this, &MyImage::onOpenBtnClicked);
+    connect(ui->CloseBtn, &QPushButton::clicked, this, &MyImage::onCloseBtnClicked);
+    connect(ui->RobertsBtn, &QPushButton::clicked, this, &MyImage::onRobertBtnClicked);
+    connect(ui->PrewittBtn, &QPushButton::clicked, this, &MyImage::onPrewittBtnClicked);
+    connect(ui->SobelBtn, &QPushButton::clicked, this, &MyImage::onSobelBtnClicked);
+    connect(ui->LoGBtn, &QPushButton::clicked, this, &MyImage::onLoGBtnClicked);
+    connect(ui->ScharrBtn, &QPushButton::clicked, this, &MyImage::onScharrBtnClicked);
+    connect(ui->CannyBtn, &QPushButton::clicked, this, &MyImage::onCannyBtnClicked);
 }
 
 void MyImage::UpdateImage(QImage image)
@@ -144,27 +154,150 @@ void MyImage::onSliderValueChanged()
 
 void MyImage::onMeanBtnClicked()
 {
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
     emit MeanBtnClicked();
 }
 
 void MyImage::onMiddleBtnClicked()
 {
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
     emit MiddleBtnClicked();
 }
 
 void MyImage::onGaussianBtnClicked()
 {
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
     emit GaussianBtnClicked();
 }
 
 void MyImage::onLowPassBtnClicked()
 {
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
     emit LowPassBtnClicked();
 }
 
 void MyImage::onHighPassBtnClicked()
 {
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
     emit HighPassBtnClicked();
 }
 
+void MyImage::onCorrosionBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit CorrosionBtnClicked();
+}
 
+void MyImage::onExpansionBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit ExpansionBtnClicked();
+}
+
+void MyImage::onOpenBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit OpenBtnClicked();
+}
+
+void MyImage::onCloseBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit CloseBtnClicked();
+}
+
+void MyImage::onRobertBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit RobertBtnClicked();
+}
+
+void MyImage::onPrewittBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit PrewittBtnClicked();
+}
+
+void MyImage::onSobelBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit SobelBtnClicked();
+}
+
+void MyImage::onLoGBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit LoGBtnClicked();
+}
+
+void MyImage::onScharrBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit ScharrBtnClicked();
+}
+
+void MyImage::onCannyBtnClicked()
+{
+    if(IsBinary || IsTransformed)
+    {
+        IsBinary = false;
+        IsTransformed = false;
+    }
+    emit CannyBtnClicked();
+}

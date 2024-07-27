@@ -372,7 +372,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_16">
             <item>
-             <widget class="QPushButton" name="Scharr">
+             <widget class="QPushButton" name="ScharrBtn">
               <property name="text">
                <string>Scharr</string>
               </property>

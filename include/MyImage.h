@@ -15,6 +15,16 @@ signals:
     void GaussianBtnClicked();
     void LowPassBtnClicked();
     void HighPassBtnClicked();
+    void CorrosionBtnClicked();
+    void ExpansionBtnClicked();
+    void OpenBtnClicked();
+    void CloseBtnClicked();
+    void RobertBtnClicked();
+    void PrewittBtnClicked();
+    void SobelBtnClicked();
+    void LoGBtnClicked();
+    void ScharrBtnClicked();
+    void CannyBtnClicked();
     
 public:
     MyImage(QWidget* parent = nullptr);
@@ -41,4 +51,14 @@ private slots:
     void onGaussianBtnClicked();
     void onLowPassBtnClicked();
     void onHighPassBtnClicked();
+    void onCorrosionBtnClicked();
+    void onExpansionBtnClicked();
+    void onOpenBtnClicked();
+    void onCloseBtnClicked();
+    void onRobertBtnClicked();
+    void onPrewittBtnClicked();
+    void onSobelBtnClicked();
+    void onLoGBtnClicked();
+    void onScharrBtnClicked();
+    void onCannyBtnClicked();
 };
