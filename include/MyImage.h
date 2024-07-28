@@ -31,6 +31,7 @@ signals:
     void SaltAndPepperNoiseBtnClicked();
     void PoissonNoiseBtnClicked();
     void UniformNoiseBtnClicked();
+    void NoiseParameterBtnClicked();
     
 public:
     MyImage(QWidget* parent = nullptr);
@@ -43,7 +44,7 @@ private:
     bool IsTransformed = false;
 
 public slots:
-    void UpdateImage(QImage image);
+    void UpdateImage(const QImage &image);
 
 private slots:
     void onImportBtnClicked();
@@ -73,4 +74,5 @@ private slots:
     void onSaltAndPepperNoiseBtnClicked();
     void onPoissonNoiseBtnClicked();
     void onUniformNoiseBtnClicked();
+    void onNoiseParameterBtnClicked();
 };

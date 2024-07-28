@@ -1,6 +1,7 @@
 #include "MyImage.h"
 #include <QFileDialog>
 #include <QDebug>
+#include <QElapsedTimer>
 
 MyImage::MyImage(QWidget *parent)
     : QMainWindow(parent), ui(new Ui_MyImage)
@@ -35,9 +36,10 @@ MyImage::MyImage(QWidget *parent)
     connect(ui->SaltNoiseBtn, &QPushButton::clicked, this, &MyImage::onSaltAndPepperNoiseBtnClicked);
     connect(ui->PoissonNoiseBtn, &QPushButton::clicked, this, &MyImage::onPoissonNoiseBtnClicked);
     connect(ui->UniformNoiseBtn, &QPushButton::clicked, this, &MyImage::onUniformNoiseBtnClicked);
+    connect(ui->NoiseUpdateBtn, &QPushButton::clicked, this, &MyImage::onNoiseParameterBtnClicked);
 }
 
-void MyImage::UpdateImage(QImage image)
+void MyImage::UpdateImage(const QImage &image)
 {
     if (image.isNull())
     {
@@ -45,10 +47,20 @@ void MyImage::UpdateImage(QImage image)
         return;
     }
 
-    QSize labelSize = ui->PicLabelBefore->size();
-    QPixmap pixmap = QPixmap::fromImage(image).scaled(labelSize,
-                     Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    ui->PicLabelBefore->setPixmap(pixmap);
+    // 获取标签的大小
+    const QSize labelSize = ui->PicLabelBefore->size();
+
+    // 仅在图像大小与标签大小不同时进行缩放
+    if (image.size() != labelSize)
+    {
+        QPixmap pixmap = QPixmap::fromImage(image).scaled(labelSize,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        ui->PicLabelBefore->setPixmap(pixmap);
+    }
+    else
+    {
+        ui->PicLabelBefore->setPixmap(QPixmap::fromImage(image));
+    }
     
 }
 
@@ -170,12 +182,14 @@ void MyImage::onMeanBtnClicked()
 
 void MyImage::onMiddleBtnClicked()
 {
+
     if(IsBinary || IsTransformed)
     {
         IsBinary = false;
         IsTransformed = false;
     }
     emit MiddleBtnClicked();
+
 }
 
 void MyImage::onGaussianBtnClicked()
@@ -356,4 +370,10 @@ void MyImage::onUniformNoiseBtnClicked()
         IsTransformed = false;
     }
     emit UniformNoiseBtnClicked();
+}
+
+void MyImage::onNoiseParameterBtnClicked()
+{
+    emit NoiseParameterBtnClicked();
+    qDebug() << "NoiseParameterBtnClicked signal send";
 }

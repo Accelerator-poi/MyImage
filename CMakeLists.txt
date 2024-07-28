@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
 project(MyImage LANGUAGES CXX)
 
+
 set(CMAKE_PREFIX_PATH "/home/luffy/Qt/6.5.3/gcc_64/" CACHE PATH "Qt Kit Dir")
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_BUILD_TYPE Release)
+
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 # 修正拼写错误
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -platform xcb")

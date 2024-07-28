@@ -34,10 +34,10 @@ public slots:
     void Canny();
     void Back();
     void Next();
-    void GaussianNoise();
-    void SaltAndPepperNoise();
+    void GaussianNoise(int mean, int dev);
+    void SaltAndPepperNoise(double density);
     void PoissonNoise();
-    void UniformNoise();
+    void UniformNoise(int mean, int dev, double density);
 
 signals:
     void imageReady(const QImage &image);

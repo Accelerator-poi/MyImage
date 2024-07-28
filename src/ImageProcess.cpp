@@ -1,6 +1,7 @@
 #include "ImageProcess.h"
 #include <QDebug> // Add this line to include the QDebug header
 #include <random>
+#include <QElapsedTimer>
 
 void ImageProcess::setImg(QString filename)
 {
@@ -94,10 +95,10 @@ void ImageProcess::Mean()
         qDebug() << "Empty image";
         return;
     }
-    cv::Mat dst;
-    cv::blur(this->currentImage, dst, cv::Size(5, 5));
-    emit imageReady(mat2QImage(dst));
-    this->currentImage = dst;
+    // cv::Mat dst;
+    cv::blur(this->currentImage, this->currentImage, cv::Size(5, 5));
+    emit imageReady(mat2QImage(this->currentImage));
+    // this->currentImage = dst;
     UpdatePicVec();
 }
 
@@ -108,10 +109,8 @@ void ImageProcess::Middle()
         qDebug() << "Empty image";
         return;
     }
-    cv::Mat dst;
-    cv::medianBlur(this->currentImage, dst, 5);
-    emit imageReady(mat2QImage(dst));
-    this->currentImage = dst;
+    cv::medianBlur(this->currentImage, this->currentImage, 5);
+    emit imageReady(mat2QImage(this->currentImage));
     UpdatePicVec();
 }
 
@@ -136,10 +135,10 @@ void ImageProcess::LowPass()
         qDebug() << "Empty image";
         return;
     }
-    cv::Mat dst;
-    cv::GaussianBlur(this->currentImage, dst, cv::Size(21, 21), 0);
-    emit imageReady(mat2QImage(dst));
-    this->currentImage = dst;
+    // cv::Mat dst;
+    cv::GaussianBlur(this->currentImage, this->currentImage, cv::Size(21, 21), 0);
+    emit imageReady(mat2QImage(this->currentImage));
+    // this->currentImage = dst;
     UpdatePicVec();
 }
 
@@ -150,12 +149,12 @@ void ImageProcess::HighPass()
         qDebug() << "Empty image";
         return;
     }
-    cv::Mat dst;
+    // cv::Mat dst;
     cv::Mat lowPass;
     cv::GaussianBlur(this->currentImage, lowPass, cv::Size(21, 21), 0);
-    cv::addWeighted(this->currentImage, 1.5, lowPass, -0.5, 0, dst);
-    emit imageReady(mat2QImage(dst));
-    this->currentImage = dst;
+    cv::addWeighted(this->currentImage, 1.5, lowPass, -0.5, 0, this->currentImage);
+    emit imageReady(mat2QImage(this->currentImage));
+    // this->currentImage = dst;
     UpdatePicVec();
 }
 
@@ -362,9 +361,13 @@ void ImageProcess::Next()
     }
 }
 
-void ImageProcess::GaussianNoise()
+/*
+mean: 噪声均值 0-255
+stddev: 噪声标准差 0-100
+*/
+void ImageProcess::GaussianNoise(int mean, int stddev)
 {
-    int mean = 0, stddev = 50;
+    // int mean = 0, stddev = 50;
     cv::Mat image = this->currentImage.clone();
     cv::Mat noise(image.size(), image.type());
     std::default_random_engine generator;
@@ -377,7 +380,10 @@ void ImageProcess::GaussianNoise()
             for (int c = 0; c < image.channels(); ++c)
             {
                 double noiseValue = distribution(generator);
-                image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                if (image.channels() == 3)
+                    image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                else if (image.channels() == 1)
+                    image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
             }
         }
     }
@@ -386,27 +392,28 @@ void ImageProcess::GaussianNoise()
     UpdatePicVec();
 }
 
-void ImageProcess::SaltAndPepperNoise()
+// density: 噪声密度 0-1
+void ImageProcess::SaltAndPepperNoise(double density)
 {
+    // double density = 0.1;
     cv::Mat image = this->currentImage.clone();
-    cv::Mat noise(image.size(), image.type());
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, 255);
+    std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
     for (int i = 0; i < image.rows; ++i)
     {
         for (int j = 0; j < image.cols; ++j)
         {
-            for (int c = 0; c < image.channels(); ++c)
+            double randomValue = distribution(generator);
+            if (randomValue < density)
             {
-                int noiseValue = distribution(generator);
-                if (noiseValue < 30)
+                if (image.channels() == 3)
                 {
-                    image.at<cv::Vec3b>(i, j)[c] = 0;
+                    image.at<cv::Vec3b>(i, j) = randomValue < density / 2 ? cv::Vec3b(0, 0, 0) : cv::Vec3b(255, 255, 255);
                 }
-                else if (noiseValue > 225)
+                else if (image.channels() == 1)
                 {
-                    image.at<cv::Vec3b>(i, j)[c] = 255;
+                    image.at<uchar>(i, j) = randomValue < density / 2 ? 0 : 255;
                 }
             }
         }
@@ -430,7 +437,10 @@ void ImageProcess::PoissonNoise()
             for (int c = 0; c < image.channels(); ++c)
             {
                 int noiseValue = distribution(generator);
-                image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                if (image.channels() == 3)
+                    image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                else if (image.channels() == 1)
+                    image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
             }
         }
     }
@@ -439,21 +449,34 @@ void ImageProcess::PoissonNoise()
     UpdatePicVec();
 }
 
-void ImageProcess::UniformNoise()
+/*
+mean: 噪声均值 0-255
+range: 噪声范围 0-255
+density: 噪声密度 0-1
+*/
+void ImageProcess::UniformNoise(int mean, int range, double density)
 {
+    // int mean = 0, range = 50;
+    // double density = 0.1;
     cv::Mat image = this->currentImage.clone();
     cv::Mat noise(image.size(), image.type());
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(-50, 50);
+    std::uniform_int_distribution<int> distribution(mean - range, mean + range);
 
     for (int i = 0; i < image.rows; ++i)
     {
         for (int j = 0; j < image.cols; ++j)
         {
-            for (int c = 0; c < image.channels(); ++c)
+            if (static_cast<double>(rand()) / RAND_MAX <= density) // 根据密度决定是否添加噪声
             {
-                int noiseValue = distribution(generator);
-                image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                for (int c = 0; c < image.channels(); ++c)
+                {
+                    int noiseValue = distribution(generator);
+                    if (image.channels() == 3)
+                        image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                    else if (image.channels() == 1)
+                        image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
+                }
             }
         }
     }
@@ -473,13 +496,11 @@ QImage ImageProcess::mat2QImage(const cv::Mat &mat)
     // 检查图像类型并进行相应的转换
     if (mat.type() == CV_8UC1) // 灰度图像
     {
-        QImage image(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_Grayscale8);
-        return image.copy();
+        return QImage(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_Grayscale8);
     }
     else if (mat.type() == CV_8UC3) // 彩色图像
     {
-        QImage image(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
-        return image.rgbSwapped().copy(); // OpenCV的BGR格式转换为Qt的RGB格式
+        return QImage(mat.data, mat.cols, mat.rows, mat.step, QImage::Format_BGR888); // 直接使用BGR格式
     }
     else
     {
@@ -488,13 +509,17 @@ QImage ImageProcess::mat2QImage(const cv::Mat &mat)
     }
 }
 
+
 void ImageProcess::UpdatePicVec()
 {
-    if (PicPoint != &PicVec.back() && PicVec.size() != 0)
+    if (!PicVec.empty() && PicPoint != &PicVec.back())
     {
-        while (&PicVec.back() != PicPoint)
+        auto it = std::find_if(PicVec.begin(), PicVec.end(), [this](const cv::Mat& img) {
+            return cv::norm(img, *PicPoint, cv::NORM_L2) == 0;
+        });
+        if (it != PicVec.end())
         {
-            PicVec.pop_back();
+            PicVec.erase(it + 1, PicVec.end());
         }
     }
 
