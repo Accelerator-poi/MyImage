@@ -32,6 +32,7 @@ signals:
     void PoissonNoiseBtnClicked();
     void UniformNoiseBtnClicked();
     void NoiseParameterBtnClicked();
+    void FFTBtnClicked();
     
 public:
     MyImage(QWidget* parent = nullptr);
@@ -75,4 +76,5 @@ private slots:
     void onPoissonNoiseBtnClicked();
     void onUniformNoiseBtnClicked();
     void onNoiseParameterBtnClicked();
+    void onFFTBtnClicked();
 };

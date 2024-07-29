@@ -22,6 +22,7 @@ ImageController::ImageController(MyImage *view, ImageProcess *model, NoiseParame
     connect(model,&ImageProcess::imageReady,view,&MyImage::UpdateImage,Qt::QueuedConnection);
     connect(view, &MyImage::BinaryBtnClicked, model, &ImageProcess::Binary, Qt::QueuedConnection);
     connect(view, &MyImage::TransformBtnClicked, model, &ImageProcess::Transform, Qt::QueuedConnection);
+    connect(view, &MyImage::FFTBtnClicked, model, &ImageProcess::FFT, Qt::QueuedConnection);
     connect(view, &MyImage::MeanBtnClicked, model, &ImageProcess::Mean, Qt::QueuedConnection);
     connect(view, &MyImage::MiddleBtnClicked, model, &ImageProcess::Middle, Qt::QueuedConnection);
 

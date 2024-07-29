@@ -37,6 +37,7 @@ MyImage::MyImage(QWidget *parent)
     connect(ui->PoissonNoiseBtn, &QPushButton::clicked, this, &MyImage::onPoissonNoiseBtnClicked);
     connect(ui->UniformNoiseBtn, &QPushButton::clicked, this, &MyImage::onUniformNoiseBtnClicked);
     connect(ui->NoiseUpdateBtn, &QPushButton::clicked, this, &MyImage::onNoiseParameterBtnClicked);
+    connect(ui->FFTBtn, &QPushButton::clicked, this, &MyImage::onFFTBtnClicked);
 }
 
 void MyImage::UpdateImage(const QImage &image)
@@ -376,4 +377,9 @@ void MyImage::onNoiseParameterBtnClicked()
 {
     emit NoiseParameterBtnClicked();
     qDebug() << "NoiseParameterBtnClicked signal send";
+}
+
+void MyImage::onFFTBtnClicked()
+{
+    emit FFTBtnClicked();
 }

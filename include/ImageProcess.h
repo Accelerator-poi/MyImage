@@ -6,10 +6,17 @@
 #include <QImage>
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <QRunnable>
+
+class QThreadPool;
 
 class ImageProcess : public QObject
-{    
+{
     Q_OBJECT
+
+public:
+    ImageProcess(QObject *parent = nullptr);
+    ~ImageProcess();
 
 public slots:
     void setImg(QString filename);
@@ -38,16 +45,30 @@ public slots:
     void SaltAndPepperNoise(double density);
     void PoissonNoise();
     void UniformNoise(int mean, int dev, double density);
+    void FFT();
 
 signals:
     void imageReady(const QImage &image);
 
 private:
     cv::Mat currentImage;
+    QThreadPool *threadPool;
     QImage mat2QImage(const cv::Mat &mat);
     std::vector<cv::Mat> PicVec;
-    cv::Mat* PicPoint;
+    cv::Mat *PicPoint;
     void UpdatePicVec();
 };
 
+class MyRunnable : public QRunnable
+{
+public:
+    MyRunnable(std::function<void()> task) : m_task(task) {}
+    void run() override
+    {
+        m_task();
+    }
+
+private:
+    std::function<void()> m_task;
+};
 #endif
