@@ -3,12 +3,12 @@
 #define IMAGEPROCESS_H
 
 #include <QObject>
-#include <QImage>
 #include <opencv2/opencv.hpp>
-#include <vector>
 #include <QRunnable>
 
 class QThreadPool;
+class QImage;
+class vector;
 
 class ImageProcess : public QObject
 {

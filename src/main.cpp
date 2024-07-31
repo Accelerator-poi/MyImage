@@ -1,11 +1,21 @@
+#include "NewWindow.h"
+#include <QApplication>
+
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    NewWindow w;
+    w.show();
+    return a.exec();
+}
+
+//MVC模式
+/*
 #include "MyImage.h"
 #include "ImageController.h"
 #include "ImageProcess.h"
 #include "NoiseParameterDialog.h"
-
-#include <QApplication>
-// #pragma comment(lib, "user32.lib")
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -16,3 +26,4 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+*/

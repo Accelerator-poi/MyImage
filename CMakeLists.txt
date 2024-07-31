@@ -13,8 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 # 修正拼写错误
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -platform xcb")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
+# message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
 find_package(OpenCV REQUIRED)
 
@@ -23,6 +24,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include ${Qt6Core_INCLUDE_DIRS} ${Qt6Gui
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE HEADERS "${CMAKE_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE UIS "${CMAKE_SOURCE_DIR}/ui/*.ui")
+# message(NOTICE "${CMAKE_SOURCE_DIR}")
 
 add_executable(${PROJECT_NAME}
     ${SOURCES}

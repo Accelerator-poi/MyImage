@@ -5,6 +5,8 @@
 #include <QThread>
 #include <QThreadPool>
 #include <QRunnable>
+#include <QImage>
+#include <vector>
 #include <omp.h>
 
 void ImageProcess::setImg(QString filename)
@@ -602,6 +604,7 @@ void ImageProcess::UniformNoise(int mean, int range, double density)
     UpdatePicVec();
 }
 
+
 void ImageProcess::FFT()
 {
     QElapsedTimer timer;
@@ -676,6 +679,8 @@ void ImageProcess::FFT()
     emit imageReady(mat2QImage(mergedSpectrum));
     qDebug() << "FFT image ready" << timer.elapsed() << "ms";
 }
+
+
 
 QImage ImageProcess::mat2QImage(const cv::Mat &mat)
 {
