@@ -464,25 +464,11 @@ void ImageProcess::GaussianNoise(int mean, int stddev)
     cv::Mat image = this->currentImage.clone();
     cv::Mat noise(image.size(), image.type());
 
-    auto addNoise = [&](const cv::Range &range)
-    {
-        std::default_random_engine generator;
-        std::normal_distribution<double> distribution(mean, stddev);
-        for (int i = range.start; i < range.end; ++i)
-        {
-            uchar *rowPtr = image.ptr<uchar>(i);
-            for (int j = image.cols - 1; j >= 0; --j)
-            {
-                for (int c = image.channels() - 1; c >= 0; --c)
-                {
-                    double noiseValue = distribution(generator);
-                    rowPtr[j * image.channels() + c] = cv::saturate_cast<uchar>(rowPtr[j * image.channels() + c] + noiseValue);
-                }
-            }
-        }
-    };
+    // 使用OpenCV的randn函数生成高斯噪声
+    cv::randn(noise, mean, stddev);
 
-    cv::parallel_for_(cv::Range(0, image.rows), addNoise);
+    // 将噪声添加到图像中
+    image += noise;
 
     emit imageReady(mat2QImage(image));
     this->currentImage = image;
@@ -500,7 +486,10 @@ void ImageProcess::SaltAndPepperNoise(double density)
 
     auto addNoise = [&](const cv::Range &range)
     {
-        std::default_random_engine generator;
+        // std::default_random_engine generator;
+        // std::uniform_real_distribution<double> distribution(0.0, 1.0);
+        std::random_device rd;
+        std::mt19937 generator(rd());
         std::uniform_real_distribution<double> distribution(0.0, 1.0);
         for (int i = range.start; i < range.end; ++i)
         {
