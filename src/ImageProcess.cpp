@@ -463,22 +463,20 @@ void ImageProcess::GaussianNoise(int mean, int stddev)
     timer.start();
     cv::Mat image = this->currentImage.clone();
     cv::Mat noise(image.size(), image.type());
-    std::default_random_engine generator;
-    std::normal_distribution<double> distribution(mean, stddev);
 
     auto addNoise = [&](const cv::Range &range)
     {
+        std::default_random_engine generator;
+        std::normal_distribution<double> distribution(mean, stddev);
         for (int i = range.start; i < range.end; ++i)
         {
-            for (int j = 0; j < image.cols; ++j)
+            uchar *rowPtr = image.ptr<uchar>(i);
+            for (int j = image.cols - 1; j >= 0; --j)
             {
-                for (int c = 0; c < image.channels(); ++c)
+                for (int c = image.channels() - 1; c >= 0; --c)
                 {
                     double noiseValue = distribution(generator);
-                    if (image.channels() == 3)
-                        image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
-                    else if (image.channels() == 1)
-                        image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
+                    rowPtr[j * image.channels() + c] = cv::saturate_cast<uchar>(rowPtr[j * image.channels() + c] + noiseValue);
                 }
             }
         }
@@ -496,26 +494,31 @@ void ImageProcess::GaussianNoise(int mean, int stddev)
 void ImageProcess::SaltAndPepperNoise(double density)
 {
     // double density = 0.1;
+    QElapsedTimer timer;
+    timer.start();
     cv::Mat image = this->currentImage.clone();
-    std::default_random_engine generator;
-    std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
     auto addNoise = [&](const cv::Range &range)
     {
+        std::default_random_engine generator;
+        std::uniform_real_distribution<double> distribution(0.0, 1.0);
         for (int i = range.start; i < range.end; ++i)
         {
-            for (int j = 0; j < image.cols; ++j)
+            uchar *rowPtr = image.ptr<uchar>(i);
+            for (int j = image.cols - 1; j >= 0; --j)
             {
                 double randomValue = distribution(generator);
                 if (randomValue < density)
                 {
                     if (image.channels() == 3)
                     {
-                        image.at<cv::Vec3b>(i, j) = randomValue < density / 2 ? cv::Vec3b(0, 0, 0) : cv::Vec3b(255, 255, 255);
+                        cv::Vec3b *pixel = reinterpret_cast<cv::Vec3b *>(rowPtr + j * image.elemSize());
+                        *pixel = randomValue < density / 2 ? cv::Vec3b(0, 0, 0) : cv::Vec3b(255, 255, 255);
                     }
                     else if (image.channels() == 1)
                     {
-                        image.at<uchar>(i, j) = randomValue < density / 2 ? 0 : 255;
+                        uchar *pixel = rowPtr + j * image.elemSize();
+                        *pixel = randomValue < density / 2 ? 0 : 255;
                     }
                 }
             }
@@ -527,6 +530,7 @@ void ImageProcess::SaltAndPepperNoise(double density)
     emit imageReady(mat2QImage(image));
     this->currentImage = image;
     UpdatePicVec();
+    qDebug() << "Salt and pepper noise image ready" << timer.elapsed() << "ms";
 }
 
 void ImageProcess::PoissonNoise()
@@ -534,23 +538,22 @@ void ImageProcess::PoissonNoise()
     QElapsedTimer timer;
     timer.start();
     cv::Mat image = this->currentImage.clone();
-    cv::Mat noise(image.size(), image.type());
-    std::default_random_engine generator;
-    std::poisson_distribution<int> distribution(128);
 
     auto addNoise = [&](const cv::Range &range)
     {
+        std::mt19937 localGenerator(std::random_device{}());
+        std::poisson_distribution<int> localDistribution(128);
+
         for (int i = range.start; i < range.end; ++i)
         {
+            uchar *rowPtr = image.ptr<uchar>(i);
             for (int j = 0; j < image.cols; ++j)
             {
+                uchar *pixelPtr = rowPtr + (j * image.channels());
                 for (int c = 0; c < image.channels(); ++c)
                 {
-                    int noiseValue = distribution(generator);
-                    if (image.channels() == 3)
-                        image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
-                    else if (image.channels() == 1)
-                        image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
+                    int noiseValue = localDistribution(localGenerator);
+                    pixelPtr[c] = cv::saturate_cast<uchar>(pixelPtr[c] + noiseValue);
                 }
             }
         }
@@ -563,34 +566,40 @@ void ImageProcess::PoissonNoise()
     UpdatePicVec();
     qDebug() << "Poisson noise image ready" << timer.elapsed() << "ms";
 }
-
 /*
 mean: 噪声均值 0-255
 range: 噪声范围 0-255
 density: 噪声密度 0-1
 */
-void ImageProcess::UniformNoise(int mean, int range, double density)
+void ImageProcess::UniformNoise(int mean, int Range, double density)
 {
+    QElapsedTimer timer;
+    timer.start();
     cv::Mat image = this->currentImage.clone();
     cv::Mat noise(image.size(), image.type());
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(mean - range, mean + range);
+    std::mt19937 generator(std::random_device{}());
 
     auto addNoise = [&](const cv::Range &range)
     {
+        std::mt19937 localGenerator(std::random_device{}());
+        std::uniform_int_distribution<int> localDistribution(mean - Range, mean + Range);
+        std::uniform_real_distribution<double> localDensityDistribution(0.0, 1.0);
+
         for (int i = range.start; i < range.end; ++i)
         {
+            uchar *rowPtr = image.ptr<uchar>(i);
             for (int j = 0; j < image.cols; ++j)
             {
-                if (static_cast<double>(rand()) / RAND_MAX <= density) // 根据密度决定是否添加噪声
+                if (localDensityDistribution(localGenerator) <= density) // 根据密度决定是否添加噪声
                 {
+                    uchar *pixelPtr = rowPtr + (j * image.channels());
                     for (int c = 0; c < image.channels(); ++c)
                     {
-                        int noiseValue = distribution(generator);
+                        int noiseValue = localDistribution(localGenerator);
                         if (image.channels() == 3)
-                            image.at<cv::Vec3b>(i, j)[c] = cv::saturate_cast<uchar>(image.at<cv::Vec3b>(i, j)[c] + noiseValue);
+                            pixelPtr[c] = cv::saturate_cast<uchar>(pixelPtr[c] + noiseValue);
                         else if (image.channels() == 1)
-                            image.at<uchar>(i, j) = cv::saturate_cast<uchar>(image.at<uchar>(i, j) + noiseValue);
+                            pixelPtr[0] = cv::saturate_cast<uchar>(pixelPtr[0] + noiseValue);
                     }
                 }
             }
@@ -602,8 +611,8 @@ void ImageProcess::UniformNoise(int mean, int range, double density)
     emit imageReady(mat2QImage(image));
     this->currentImage = image;
     UpdatePicVec();
+    qDebug() << "Uniform noise image ready" << timer.elapsed() << "ms";
 }
-
 
 void ImageProcess::FFT()
 {
@@ -679,8 +688,6 @@ void ImageProcess::FFT()
     emit imageReady(mat2QImage(mergedSpectrum));
     qDebug() << "FFT image ready" << timer.elapsed() << "ms";
 }
-
-
 
 QImage ImageProcess::mat2QImage(const cv::Mat &mat)
 {
