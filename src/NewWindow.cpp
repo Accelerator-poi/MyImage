@@ -59,6 +59,13 @@ NewWindow::NewWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui_MyImage)
     connect(noiseDialog, &NoiseParameterDialog::UniformNoiseParameter, model, &ImageProcess::UniformNoise, Qt::QueuedConnection);
     connect(ui->PoissonNoiseBtn, &QPushButton::clicked, model, &ImageProcess::PoissonNoise,Qt::QueuedConnection);
 
+    // 获取所有按钮并连接信号槽
+    QList<QPushButton*> buttons = this->findChildren<QPushButton*>();
+    for (QPushButton* button : buttons) {
+        if(button -> objectName() != "BinarizationBtn" && button -> objectName() != "TransformBtn")
+        connect(button, &QPushButton::clicked, this, &NewWindow::UpdateParameter, Qt::QueuedConnection);
+    }
+
     connect(thread, &QThread::finished, model, &QObject::deleteLater, Qt::QueuedConnection);
 }
 

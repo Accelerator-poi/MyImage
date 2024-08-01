@@ -486,8 +486,6 @@ void ImageProcess::SaltAndPepperNoise(double density)
 
     auto addNoise = [&](const cv::Range &range)
     {
-        // std::default_random_engine generator;
-        // std::uniform_real_distribution<double> distribution(0.0, 1.0);
         std::random_device rd;
         std::mt19937 generator(rd());
         std::uniform_real_distribution<double> distribution(0.0, 1.0);
